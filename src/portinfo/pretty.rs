@@ -19,7 +19,7 @@ trait PrettyPrintable: PortInfo {
 
 impl PrettyPrintable for PortInfo {
   fn _print(&self) {
-    
+    print!("Not implemented")
   }
 
   fn _print_v(&self) {

@@ -1,8 +1,5 @@
 use serde::{Deserialize, Serialize};
-use owo_colors::OwoColorize;
-use std::{cmp::min, collections::HashMap, string::String};
-use termion::terminal_size;
-use textwrap::wrap;
+use std::{collections::HashMap, string::String};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PortInfo {

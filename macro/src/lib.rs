@@ -5,6 +5,8 @@ use proc_macro::TokenStream;
 use quote::quote;
 use serde_json;
 
+mod portinfo;
+
 use portinfo::{ PortInfo, PortLookup };
 
 #[proc_macro]
