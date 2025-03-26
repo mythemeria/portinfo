@@ -8,7 +8,7 @@ pub struct PortInfo {
   desc: String,
   layer4: Vec<Layer4Info>,
   wiki_link: Option<String>,
-  rfi_link: Option<String>,
+  rfc_link: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

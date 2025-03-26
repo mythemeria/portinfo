@@ -11,8 +11,6 @@ serde_json = "1.0.140"
 termion = "4.0.4"
 textwrap = "0.16.2"
 
-serde_macro = { path = "macro" }
-
 [[bin]]
 name = "portinfo"
 path = "src/main.rs"

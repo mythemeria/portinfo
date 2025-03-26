@@ -18,7 +18,7 @@
       }
     ],
     "wiki_link": "https://en.wikipedia.org/wiki/HTTPS",
-    "rfi_link": "https://www.rfc-editor.org/rfc/rfc9110.html"
+    "rfc_link": "https://www.rfc-editor.org/rfc/rfc9110.html"
   },
   {
     "port": 443,
@@ -39,6 +39,6 @@
       }
     ],
     "wiki_link": "https://en.wikipedia.org/wiki/HTTPS",
-    "rfi_link": "https://www.rfc-editor.org/rfc/rfc2818.html"
+    "rfc_link": "https://www.rfc-editor.org/rfc/rfc2818.html"
   }
 ]

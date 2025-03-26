@@ -1,9 +1,8 @@
 use std::{env, string::String, collections::HashMap};
 
 mod portinfo;
-mod pretty;
 
-use portinfo::portinfo::PortInfo;
+use portinfo::{PortInfo, Verbosity};
 
 fn parse_ports(input: &str) -> Vec<u16> {
   let mut ports = Vec::new();
@@ -44,7 +43,7 @@ fn main() {
 
   parse_ports(&args[1]).iter().for_each(|port| {
     if let Some(protocol) = protocol_map.get(port) {
-      protocol.print();
+      protocol.pretty_print(Verbosity::Verbose);
       println!("\n");
     }
   });

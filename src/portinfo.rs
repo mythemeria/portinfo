@@ -1,4 +1,8 @@
-use crate::portinfo::PortInfo;
+use owo_colors::OwoColorize;
+use std::{cmp::min, string::String, collections::HashMap};
+use termion::terminal_size;
+use textwrap::wrap;
+use serde::{Deserialize, Serialize};
 
 const MIN_TERM_WIDTH_FOR_BOX: usize = 40;
 const BOX_PADDING: usize = 2;
@@ -6,18 +10,44 @@ const PORT_TITLE_GAP: usize = 2;
 const MARGIN: usize = 2;
 const DESC_MAX_WIDTH: usize = 100;
 
-fn hyperlink(text: &str, url: &str) -> String {
-  format!("\x1b]8;;{url}\x1b\\{text}\x1b]8;;\x1b\\")
+pub enum Verbosity {
+  Normal,
+  Verbose,
 }
 
-trait PrettyPrintable: PortInfo {
-  fn _title_v(&self, max_text_width: usize, port_width: usize, use_box: bool);
-  fn _description_v(&self, line_width: usize);
-  fn _protocols_v(&self, term_width: usize);
-  fn _links_v(&self, max_width: usize);
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PortInfo {
+  port: u16,
+  title: String,
+  desc: String,
+  layer4: Vec<Layer4Info>,
+  wiki_link: Option<String>,
+  rfc_link: Option<String>,
 }
 
-impl PrettyPrintable for PortInfo {
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Layer4Info {
+  name: String,
+  usage: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PortLookup {
+  port_map: HashMap<u16, PortInfo>
+}
+
+impl PortInfo {
+  pub fn get_port(&self) -> u16 {
+    self.port
+  }
+
+  pub fn pretty_print(&self, verbosity: Verbosity) {
+    match verbosity {
+      Verbosity::Normal  => self._print(),
+      Verbosity::Verbose => self._print_v(),
+    }
+  }
+
   fn _print(&self) {
     print!("Not implemented")
   }
@@ -36,7 +66,9 @@ impl PrettyPrintable for PortInfo {
     // self._protocols_v(term_width);
     self._links_v(term_width);
   }
+}
 
+impl PortInfo {
   fn _title_v(&self, max_text_width: usize, port_width: usize, use_box: bool) {
     let port = format!("[{}]", self.port);
     let wrapped_lines = wrap(self.title.as_str(), max_text_width);
@@ -79,16 +111,20 @@ impl PrettyPrintable for PortInfo {
 
     if let Some(url) = &self.wiki_link {
       let max_link = max_width - (MARGIN * 2 + 6 + 3);
-      let link_display = if url.len() > max_link { format!("{}...", &url[..max_link]) } else { url.clone() };
+      let link_display = if url.len() > max_link { format!("{}...", &url[..max_link]) } else { url.to_string() };
 
       println!("{:<margin$}Wiki: {}", "", hyperlink(&link_display, url).blue(), margin = MARGIN);
     }
 
-    if let Some(url) = &self.wiki_link {
+    if let Some(url) = &self.rfc_link {
       let max_link = max_width - (MARGIN * 2 + 6 + 3);
-      let link_display = if url.len() > max_link { format!("{}...", &url[..max_link]) } else { url.clone() };
+      let link_display = if url.len() > max_link { format!("{}...", &url[..max_link]) } else { url.to_string() };
 
       println!("{:<margin$}RFC: {}", "", hyperlink(&link_display, url).blue(), margin = MARGIN);
     }
   }
+}
+
+fn hyperlink(text: &str, url: &str) -> String {
+  format!("\x1b]8;;{url}\x1b\\{text}\x1b]8;;\x1b\\")
 }
