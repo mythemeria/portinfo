@@ -152,6 +152,7 @@ dependencies = [
  "owo-colors",
  "serde",
  "serde_json",
+ "serde_macro",
  "termion",
  "textwrap",
 ]
@@ -225,6 +226,18 @@ dependencies = [
  "memchr",
  "ryu",
  "serde",
+]
+
+[[package]]
+name = "serde_macro"
+version = "0.1.0"
+dependencies = [
+ "owo-colors",
+ "quote",
+ "serde",
+ "serde_json",
+ "termion",
+ "textwrap",
 ]
 
 [[package]]

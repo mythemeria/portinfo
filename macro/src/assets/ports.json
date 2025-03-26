@@ -3,6 +3,20 @@
     "port": 80,
     "title": "HTTP (Hypertext Transfer Protocol)",
     "desc": "HTTP (Hypertext Transfer Protocol) is an application-layer protocol for transmitting hypermedia documents, such as HTML, and is the foundation of data communication on the World Wide Web.",
+    "layer4": [
+      {
+        "name": "TCP",
+        "usage": "yes"
+      },
+      {
+        "name": "UDP",
+        "usage": "yes"
+      },
+      {
+        "name": "SCTP",
+        "usage": "yes"
+      }
+    ],
     "wiki_link": "https://en.wikipedia.org/wiki/HTTPS",
     "rfi_link": "https://www.rfc-editor.org/rfc/rfc9110.html"
   },
@@ -10,6 +24,20 @@
     "port": 443,
     "title": "HTTPS (Hypertext Transfer Protocol Secure)",
     "desc": "HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP, utilizing encryption protocols such as TLS to ensure secure communication over a computer network.",
+    "layer4": [
+      {
+        "name": "TCP",
+        "usage": "yes"
+      },
+      {
+        "name": "UDP",
+        "usage": "yes"
+      },
+      {
+        "name": "SCTP",
+        "usage": "yes"
+      }
+    ],
     "wiki_link": "https://en.wikipedia.org/wiki/HTTPS",
     "rfi_link": "https://www.rfc-editor.org/rfc/rfc2818.html"
   }

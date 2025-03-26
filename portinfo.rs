@@ -1,6 +1,6 @@
-use owo_colors::OwoColorize;
 use serde::{Deserialize, Serialize};
-use std::{env, cmp::min, string::String, collections::HashMap};
+use owo_colors::OwoColorize;
+use std::{cmp::min, collections::HashMap, string::String};
 use termion::terminal_size;
 use textwrap::wrap;
 
@@ -11,16 +11,27 @@ const MARGIN: usize = 2;
 const DESC_MAX_WIDTH: usize = 100;
 
 #[derive(Debug, Deserialize, Serialize)]
-struct PortInfo {
+pub struct PortInfo {
   port: u16,
   title: String,
   desc: String,
+  layer4: Vec<Layer4Info>,
   wiki_link: Option<String>,
   rfi_link: Option<String>,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Layer4Info {
+  name: String,
+  usage: String,
+}
+
 impl PortInfo {
-  fn pretty_print(&self)  {
+  pub fn get_port(&self) -> u16 {   // public method to access private field
+    self.port
+  }
+
+  pub fn pretty_print(&self)  {
     let port_width = self.port.to_string().len() + 2;
     let (term_width, _) = terminal_size()
       .map(|(w, h)| (w as usize, h as usize))
@@ -95,47 +106,9 @@ fn hyperlink(text: &str, url: &str) -> String {
   format!("\x1b]8;;{url}\x1b\\{text}\x1b]8;;\x1b\\")
 }
 
-fn parse_ports(input: &str) -> Vec<u16> {
-  let mut ports = Vec::new();
 
-  for part in input.split(',') {
-    if let Some((start, end)) = part.split_once('-') {
-      if let (Ok(start), Ok(end)) = (start.parse::<u16>(), end.parse::<u16>()) {
-        ports.extend(start..=end);
-      }
-    } else if let Ok(port) = part.parse::<u16>() {
-      ports.push(port);
-    }
-  }
-
-  ports
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PortLookup {
+  port_map: HashMap<u16, PortInfo>
 }
 
-fn main() {
-  let args: Vec<String> = env::args().collect();
-  if args.len() < 2 {
-    eprintln!("Usage: portinfo <ports>\n\n{}\n\t{}\n\t{}\n\t{}\n\t{}",
-      "Examples:",
-      "portinfo 80",
-      "portinfo 21,53",
-      "portinfo 318-320",
-      "portinfo 80,443-445,92"
-    );
-    return;
-  }
-
-  let json_data = include_str!("assets/ports.json");
-  let protocols: Vec<PortInfo> = serde_json::from_str(json_data).expect("Invalid JSON");
-
-  let protocol_map: HashMap<u16, PortInfo> = protocols
-    .into_iter()
-    .map(|p| (p.port, p))
-    .collect();
-
-  parse_ports(&args[1]).iter().for_each(|port| {
-    if let Some(protocol) = protocol_map.get(port) {
-      protocol.pretty_print();
-      println!("\n");
-    }
-  });
-}
